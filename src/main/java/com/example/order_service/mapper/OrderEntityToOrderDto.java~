@@ -1,0 +1,16 @@
+package com.example.service_b.mapper;
+
+import com.example.service_b.model.dto.OrderDTO;
+import com.example.service_b.model.entity.OrderEntity;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+
+@Mapper
+public interface OrderEntityToOrderDto {
+    OrderEntityToOrderDto ORDER_REQUEST_MAPPER = Mappers.getMapper(OrderEntityToOrderDto.class);
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "name", target = "name")
+    OrderDTO requestToOrder(OrderEntity orderEntity);
+}

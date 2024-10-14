@@ -1,0 +1,14 @@
+package com.example.service_b.mapper;
+
+import com.example.service_b.model.dto.ItemDTO;
+import com.example.service_b.model.request.ItemRequest;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+
+@Mapper
+public interface ItemMapper {
+    ItemMapper ORDER_ITEM_TO_ITEM_DTO_MAPPER = Mappers.getMapper(ItemMapper.class);
+
+    ItemRequest requestToOrder(ItemDTO itemDTO);
+}
