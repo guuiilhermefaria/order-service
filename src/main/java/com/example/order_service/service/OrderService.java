@@ -23,6 +23,10 @@ public class OrderService {
     private ItemClient itemClient;
 
     public OrderDTO createOrder(OrderRequest orderRequest) {
+        if (orderRequest.getItemId() == null) {
+            return null;
+        }
+
         ItemDTO item = itemClient.getItem(orderRequest.getItemId());
         orderRequest.setItemName(item.getName());
 
@@ -47,6 +51,10 @@ public class OrderService {
     }
 
     public void deleteOrder(Long id) {
+        if (!orderRepository.existsById(id)) {
+            throw new RuntimeException("Order not found");
+        }
+
         orderRepository.deleteById(id);
     }
 }

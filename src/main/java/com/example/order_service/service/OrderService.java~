@@ -1,18 +1,18 @@
-package com.example.service_b.service;
+package com.example.order_service.service;
 
-import com.example.service_b.client.ItemClient;
-import com.example.service_b.model.dto.ItemDTO;
-import com.example.service_b.model.dto.OrderDTO;
-import com.example.service_b.model.entity.OrderEntity;
-import com.example.service_b.model.request.OrderRequest;
-import com.example.service_b.repository.OrderRepository;
+import com.example.order_service.client.ItemClient;
+import com.example.order_service.model.dto.ItemDTO;
+import com.example.order_service.model.dto.OrderDTO;
+import com.example.order_service.model.entity.OrderEntity;
+import com.example.order_service.model.request.OrderRequest;
+import com.example.order_service.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.service_b.mapper.OrderRequestMapper.ORDER_REQUEST_MAPPER;
-import static com.example.service_b.mapper.OrderResponseMapper.ORDER_ENTITY_TO_ORDER_DTO;
+import static com.example.order_service.mapper.OrderRequestMapper.ORDER_REQUEST_MAPPER;
+import static com.example.order_service.mapper.OrderResponseMapper.ORDER_ENTITY_TO_ORDER_DTO;
 
 @Service
 public class OrderService {
@@ -23,6 +23,14 @@ public class OrderService {
     private ItemClient itemClient;
 
     public OrderDTO createOrder(OrderRequest orderRequest) {
+        if (orderRequest.getItemId() == null) {
+            return null;
+        }
+
+        if (!itemClient.existsById(orderRequest.getItemId())) {
+            throw new RuntimeException("Item not found");
+        }
+
         ItemDTO item = itemClient.getItem(orderRequest.getItemId());
         orderRequest.setItemName(item.getName());
 
@@ -47,6 +55,10 @@ public class OrderService {
     }
 
     public void deleteOrder(Long id) {
+        if (!orderRepository.existsById(id)) {
+            throw new RuntimeException("Order not found");
+        }
+
         orderRepository.deleteById(id);
     }
 }
